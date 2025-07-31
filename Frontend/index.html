@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobConnect Portal - Find Your Dream Job</title>
+  
+  <!-- Including external dependencies -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Including local stylesheets -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<!-- LOGIN MODAL -->
+<div id="login-modal" class="modal-overlay" style="display: none;">
+  <div class="modal">
+    <button id="login-close" class="modal-close">&times;</button>
+    <h2 class="modal-title">Login to Continue</h2>
+    <form id="login-form">
+      <div class="form-group">
+        <label for="login-email" class="form-label">Email</label>
+        <input type="email" id="login-email" class="form-input" required />
+      </div>
+      <div class="form-group">
+        <label for="login-password" class="form-label">Password</label>
+        <input type="password" id="login-password" class="form-input" required />
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">Login</button>
+    </form>
+    <div id="login-msg" class="message message-error" style="margin-top: 1rem;"></div>
+  </div>
+</div>
+
+<body>
+  <!-- HEADER NAVIGATION -->
+  <header class="header">
+    <nav class="nav-container">
+      <!-- Logo -->
+      <a href="#" class="logo" onclick="showSection('jobs')">
+        <i class="fas fa-briefcase"></i>
+        JobConnect
+      </a>
+      
+      <!-- Desktop Navigation -->
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#" class="nav-link active" data-section="jobs">Jobs</a></li>
+        <li><a href="#" class="nav-link" data-section="register">Register</a></li>
+        <li><a href="#" class="nav-link" data-section="post-job">Post Job</a></li>
+        <li><a href="#" class="nav-link" data-section="resume">Resume</a></li>
+      </ul>
+      
+      <!-- Mobile Menu Button -->
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+      </button>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="main-container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <h1 class="hero-title">Find Your Dream Job Today</h1>
+      <p class="hero-subtitle">
+        Connect with top UK employers and discover opportunities that match your skills and aspirations. 
+        Your next career move starts here.
+      </p>
+      
+      <!-- Displaying sample statistics -->
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number">2,847</span>
+          <span class="stat-label">Active Jobs</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">892</span>
+          <span class="stat-label">Companies</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">18,426</span>
+          <span class="stat-label">Job Seekers</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- JOB LISTINGS SECTION -->
+    <section class="content-section active" id="jobs-section">
+      <!-- Job Search Bar -->
+      <div class="job-search-bar">
+        <div class="search-form">
+          <input 
+            type="search" 
+            placeholder="Search jobs, companies, or keywords..." 
+            class="form-input search-input" 
+            id="job-search"
+          >
+          <select class="form-select search-select" id="location-filter">
+            <option value="">All Locations</option>
+            <option value="remote">Remote (UK)</option>
+            <option value="london">London, UK</option>
+            <option value="manchester">Manchester, UK</option>
+            <option value="birmingham">Birmingham, UK</option>
+            <option value="edinburgh">Edinburgh, UK</option>
+            <option value="bristol">Bristol, UK</option>
+            <option value="leeds">Leeds, UK</option>
+          </select>
+          <button type="button" class="btn btn-primary" onclick="searchJobs()">
+            <i class="fas fa-search"></i>
+            Search Jobs
+          </button>
+        </div>
+      </div>
+      
+      <!-- Job Listings Container -->
+      <div id="job-list" class="job-listings">
+        <!-- Jobs will be loaded dynamically via JavaScript -->
+      </div>
+    </section>
+
+    <!-- USER REGISTRATION SECTION -->
+    <section class="content-section" id="register-section">
+      <div class="section-card">
+        <div class="section-header">
+          <i class="fas fa-user-plus"></i>
+          <h2 class="section-title">Create Your Account</h2>
+        </div>
+        
+        <form id="register-form">
+          <div class="form-group">
+            <label for="name" class="form-label">Full Name</label>
+            <input 
+              type="text" 
+              id="name" 
+              class="form-input" 
+              placeholder="Enter your full name" 
+              required
+              aria-describedby="name-help"
+            >
+          </div>
+          
+          <div class="form-group">
+            <label for="email" class="form-label">Email Address</label>
+            <input 
+              type="email" 
+              id="email" 
+              class="form-input" 
+              placeholder="Enter your email address" 
+              required
+              aria-describedby="email-help"
+            >
+          </div>
+          
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input 
+              type="password" 
+              id="password" 
+              class="form-input" 
+              placeholder="Create a secure password (min 8 characters)" 
+              required
+              minlength="8"
+              aria-describedby="password-help"
+            >
+          </div>
+          
+          <button type="submit" class="btn btn-primary btn-full">
+            <i class="fas fa-user-plus"></i>
+            Create Account
+          </button>
+        </form>
+        
+        <!-- Registration Messages -->
+        <div id="register-msg" class="message"></div>
+      </div>
+    </section>
+
+    <!-- JOB POSTING SECTION -->
+    <section class="content-section" id="post-job-section">
+      <div class="section-card">
+        <div class="section-header">
+          <i class="fas fa-plus-circle"></i>
+          <h2 class="section-title">Post New Job Opportunity</h2>
+        </div>
+        
+        <form id="job-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="job-title" class="form-label">Job Title</label>
+              <input 
+                type="text" 
+                id="job-title" 
+                class="form-input" 
+                placeholder="e.g. Senior Software Engineer" 
+                required
+              >
+            </div>
+            
+            <div class="form-group">
+              <label for="company" class="form-label">Company Name</label>
+              <input 
+                type="text" 
+                id="company" 
+                class="form-input" 
+                placeholder="e.g. Tech Solutions Ltd" 
+                required
+              >
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="location" class="form-label">Location</label>
+              <input 
+                type="text" 
+                id="location" 
+                class="form-input" 
+                placeholder="e.g. London, UK or Remote" 
+                required
+              >
+            </div>
+            
+            <div class="form-group">
+              <label for="salary" class="form-label">Salary Range</label>
+              <input 
+                type="text" 
+                id="salary" 
+                class="form-input" 
+                placeholder="e.g. £40k - £60k" 
+              >
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="description" class="form-label">Job Description</label>
+            <textarea 
+              id="description" 
+              class="form-textarea" 
+              placeholder="Provide a detailed description of the role, responsibilities, and requirements..." 
+              required
+            ></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="tags" class="form-label">Skills/Tags (comma-separated)</label>
+            <input 
+              type="text" 
+              id="tags" 
+              class="form-input" 
+              placeholder="e.g. JavaScript, React, Node.js, Full-time" 
+            >
+          </div>
+          
+          <button type="submit" class="btn btn-success btn-full">
+            <i class="fas fa-briefcase"></i>
+            Post Job
+          </button>
+        </form>
+        
+        <!-- Job Posting Messages -->
+        <div id="job-msg" class="message"></div>
+      </div>
+    </section>
+
+    <!-- RESUME UPLOAD SECTION -->
+    <section class="content-section" id="resume-section">
+      <div class="section-card">
+        <div class="section-header">
+          <i class="fas fa-file-upload"></i>
+          <h2 class="section-title">Upload Your Resume</h2>
+        </div>
+        
+        <form id="resume-form" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="resume-file" class="form-label">Choose Resume File</label>
+            <div class="file-input-wrapper">
+              <input 
+                type="file" 
+                id="resume-file" 
+                class="file-input" 
+                accept=".pdf,.doc,.docx" 
+                required
+                aria-describedby="file-help"
+              >
+              <label for="resume-file" class="file-input-label">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Choose file or drag and drop</span>
+              </label>
+            </div>
+            <small id="file-help" style="color: var(--gray-500); font-size: var(--font-size-xs); margin-top: var(--spacing-2); display: block;">
+              Supported formats: PDF, DOC, DOCX (Max 5MB)
+            </small>
+          </div>
+          
+          <button type="submit" class="btn btn-success btn-full">
+            <i class="fas fa-upload"></i>
+            Upload Resume
+          </button>
+        </form>
+        
+        <!-- Resume Upload Messages -->
+        <div id="resume-msg" class="message"></div>
+      </div>
+    </section>
+  </main>
+
+  <!--FOOTER SECTION -->
+  <footer class="footer">
+    <div class="footer-content">
+      <ul class="footer-links">
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#privacy">Privacy Policy</a></li>
+        <li><a href="#terms">Terms of Service</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#help">Help Center</a></li>
+      </ul>
+      <div class="footer-copyright">
+        © 2025 JobConnect. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
